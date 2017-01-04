@@ -8,12 +8,14 @@ This should set up all necessary users with private/public ssh key authenticatio
 
 ## Running the Playbook
 
-Example command for PI:
+Before running a playbook you should install Ansible Galaxy role dependencies:
 
 ```sh
 # Install ansible-galaxy role dependencies
 ansible-galaxy install -r requirements.yml
 ```
+
+Example command for PI:
 
 ```sh
 # Run 'my-pi' playbook
