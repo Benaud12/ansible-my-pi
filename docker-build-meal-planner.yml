@@ -1,0 +1,29 @@
+---
+- hosts: pi
+  become: yes
+
+  tasks:
+    - name: Create project folder
+      file:
+        state: directory
+        owner: deploy
+        mode: 0775
+        path: /usr/src/meal-planner
+
+    - name: Clone meal-planner repo
+      git:
+        clone: yes
+        accept_hostkey: yes
+        repo: git@github.com:Benaud12/angular-meal-planner.git
+        dest: /usr/src/meal-planner
+        force: yes
+      become_user: deploy
+
+    - name: Build docker image
+      docker_image:
+        name: benaud12/meal-planner
+        tag: pi-dev
+        state: present
+        path: /usr/src/meal-planner
+        dockerfile: Dockerfile.pi
+      become_user: deploy

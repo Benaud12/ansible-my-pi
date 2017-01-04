@@ -1,0 +1,4 @@
+ansible.secret
+*.retry
+roles/*
+ansible.cfg

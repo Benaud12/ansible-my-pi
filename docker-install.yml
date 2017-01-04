@@ -1,0 +1,6 @@
+---
+- hosts: pi
+  become: yes
+
+  roles:
+    - role: Benaud12.docker-pi

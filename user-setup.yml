@@ -1,0 +1,42 @@
+---
+- hosts: pi
+  become: yes
+
+  tasks:
+    - name: Add users
+      user:
+        name: "{{ item.name }}"
+      with_items: "{{ pi_users }}"
+
+    - name: Add sudo users permissions
+      lineinfile:
+        dest: /etc/sudoers
+        backup: yes
+        state: present
+        insertafter: EOF
+        line: "{{ item.name }} ALL=(ALL) NOPASSWD: ALL"
+        validate: "visudo -cf %s"
+      with_items: "{{ pi_users }}"
+
+    - name: Add ssh authorized keys
+      authorized_key:
+        user: "{{ item.name }}"
+        key: "{{ item.key }}"
+        exclusive: yes
+      with_items: "{{ pi_users }}"
+
+    - name: Add ssh authorized keys under 'pi' user
+      authorized_key:
+        user: pi
+        key: "{{ item.key }}"
+        exclusive: no
+      with_items: "{{ pi_users }}"
+
+    - name: Create ssh private key file for deploy user
+      template:
+        src: files/pi-deploy-ssh-private-key.j2
+        dest: /home/deploy/.ssh/id_rsa
+        force: yes
+        owner: deploy
+        group: deploy
+        mode: 0600

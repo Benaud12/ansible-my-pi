@@ -1,0 +1,12 @@
+---
+- hosts: pi
+  become: yes
+
+  tasks:
+    - name: Start meal-planner app in docker container
+      docker_container:
+        name: meal-planner
+        image: benaud12/meal-planner:pi-dev
+        ports:
+          - "4200:4200"
+      become_user: deploy
