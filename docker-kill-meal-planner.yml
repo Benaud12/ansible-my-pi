@@ -1,0 +1,10 @@
+---
+- hosts: pi
+  become: yes
+
+  tasks:
+    - name: Kill meal-planner app running in docker container
+      docker_container:
+        name: meal-planner
+        state: absent
+      become_user: deploy

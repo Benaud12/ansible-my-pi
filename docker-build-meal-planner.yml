@@ -26,4 +26,6 @@
         state: present
         path: /usr/src/meal-planner
         dockerfile: Dockerfile.pi
+        force: yes
+        timeout: 180
       become_user: deploy

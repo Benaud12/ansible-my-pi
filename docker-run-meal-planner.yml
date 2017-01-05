@@ -8,5 +8,5 @@
         name: meal-planner
         image: benaud12/meal-planner:pi-dev
         ports:
-          - "4200:4200"
+          - "80:80"
       become_user: deploy
