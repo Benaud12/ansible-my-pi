@@ -1,0 +1,24 @@
+---
+- hosts: pi
+  become: yes
+
+  tasks:
+    - name: Update hostname
+      hostname:
+        name: "{{ pi_hostname }}"
+
+    - name: Write hostname to /etc/hostname file
+      shell: "echo {{ pi_hostname }} > /etc/hostname"
+
+    - name: Replace 'raspberrypi' with hostname in /etc/hosts
+      lineinfile:
+        dest: /etc/hosts
+        state: present
+        regexp: '^(.*)raspberrypi.*$'
+        line: '\1{{ pi_hostname }}'
+        backrefs: yes
+        backup: yes
+      become_user: root
+
+    - name: Run hostname script
+      shell: "/etc/init.d/hostname.sh"

@@ -1,0 +1,17 @@
+---
+- hosts: pi
+  become: yes
+
+  tasks:
+    - name: Reboot the pi
+      command: sleep 3 && shutdown -r now "Reboot triggered by Ansible script"
+      async: 1
+      poll: 0
+      ignore_errors: yes
+
+    - name: Wait for pi to come back up
+      local_action: wait_for host={{ inventory_hostname }}
+
+    - name: Bring up all docker machines
+      shell: docker start $(docker ps -aq)
+      become_user: deploy
